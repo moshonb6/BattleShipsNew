@@ -1,0 +1,47 @@
+<BattleShipGame>
+  <GameType>BASIC</GameType>
+  <boardSize>6</boardSize>
+  <shipTypes>
+    <!--1 or more repeti  tions:-->
+    <shipType id="A">
+      <category>REGULAR</category>
+      <amount>2</amount>
+      <length>3</length>
+      <score>3</score>
+    </shipType>
+  </shipTypes>
+  <!--Optional:-->
+  <mine>
+    <amount>3</amount>
+  </mine>
+  <boards>
+    <board>
+      <!--1 or more repetitions:-->
+      <ship>
+        <shipTypeId>A</shipTypeId>
+        <position x="0" y="0"/>
+        <direction>ROW</direction>
+      </ship>
+      <!--1 or more repetitions:-->
+      <ship>
+        <shipTypeId>A</shipTypeId>
+        <position x="2" y="2"/>
+        <direction>ROW</direction>
+      </ship>
+    </board>
+    <board>
+      <!--1 or more repetitions:-->
+      <ship>
+        <shipTypeId>A</shipTypeId>
+        <position x="0" y="0"/>
+        <direction>COLUMN</direction>
+      </ship>
+      <!--1 or more repetitions:-->
+      <ship>
+        <shipTypeId>A</shipTypeId>
+        <position x="2" y="2"/>
+        <direction>COLUMN</direction>
+      </ship>
+    </board>
+  </boards>
+</BattleShipGame>
