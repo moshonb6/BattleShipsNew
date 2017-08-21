@@ -18,23 +18,23 @@ public class Player {
     private Board myBoard;
     private Board oponentBoard;
     private int boardSize;
-    private static final String ROW = "row";
-    private static final String COLUMN = "column";
+    private static final String ROW = "ROW";
+    private static final String COLUMN = "COLUMN";
     private BattelShip[] battelShipsArray;
     private int numOfBattelships;
     private long avgTimeForMove;
     private int minesLeft;
     private final int MAX_MINES = 2;
 
-    public Player(String i_name,int i_boardSize, int i_numOfBattelships){
+    public Player(String i_name,int i_boardSize, int i_numOfBattelships, BattelShip[] i_battelShips){
         name = i_name;
         boardSize = i_boardSize;
         myBoardMat = new int[boardSize][boardSize];
         oponentBoardMat = new int[boardSize][boardSize];
         numOfBattelships = i_numOfBattelships;
         minesLeft = MAX_MINES;
-
         battelShipsArray = new BattelShip[numOfBattelships];
+        System.arraycopy(i_battelShips, 0, battelShipsArray, 0 ,i_numOfBattelships);
         myBoard = createMyBoard();
         oponentBoard = createOpBoard();
         createBattleShips();
@@ -76,16 +76,6 @@ public class Player {
     public void setAvgTimeForMove(double timeForMove){avgTimeForMove += timeForMove;}
 
     public Board createMyBoard(){
-        Point point1 = new Point(0,0);
-        Point point2 = new Point(1,1);
-        Point point3 = new Point(2,2);
-        BattelShip ship1 = new BattelShip('a',point1,COLUMN,4,3);
-        BattelShip ship2 = new BattelShip('a',point2,ROW,3,4);
-        BattelShip ship3 = new BattelShip('a',point3,ROW,2,5);
-        battelShipsArray[0] = ship1;
-        battelShipsArray[1] = ship2;
-        battelShipsArray[2] = ship3;
-
         return  new Board(boardSize);
     }
 
@@ -97,7 +87,7 @@ public class Player {
         int x = battelShip.getPosition().x;
         int y = battelShip.getPosition().y;
 
-        if(battelShip.getDirection() == COLUMN) {
+        if(battelShip.getDirection().equals(COLUMN)) {
             for (int i = 0; i < battelShip.getLength(); i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
                 x++;

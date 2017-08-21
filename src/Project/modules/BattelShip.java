@@ -5,14 +5,14 @@ import java.awt.*;
 //enum Direction{ROW,COLUMN}
 
 public class BattelShip {
-    private char type;
+    private String type;
     private Point position;
     private String direction;
     private int length;
     private int shipValue;
     private boolean isAlive;
 
-    public BattelShip(char i_type, Point i_position, String i_direction, int i_length, int i_shipValue){
+    public BattelShip(String i_type, Point i_position, String i_direction, int i_length, int i_shipValue){
         type = i_type;
         position = i_position;
         direction = i_direction;
@@ -20,6 +20,8 @@ public class BattelShip {
         shipValue = i_shipValue;
         isAlive = true;
     }
+
+    public BattelShip(){}
 
     public int getShipValue(){
         return shipValue;

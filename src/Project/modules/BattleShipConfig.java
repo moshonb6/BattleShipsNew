@@ -40,6 +40,10 @@ public class BattleShipConfig {
     public static int getShipLengthTypeB() {return shipLengthTypeB;}
     public static int getShipLengthTypeL() {return shipLengthTypeL;}
 
+    public static int getShipScoreTypeA() {return shipScoreTypeA;}
+    public static int getShipScoreTypeB() {return shipScoreTypeB;}
+    public static int getShipScoreTypeL() {return shipScoreTypeL;}
+
     public static int getShipLengthByShipType(String i_type){
         int res = 0;
         if( i_type.equals("A")){

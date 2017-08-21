@@ -1,25 +1,16 @@
 package Project.UI;
 
-import Project.modules.BattelShip;
 import Project.modules.BattleShipConfig;
 import Project.modules.Board;
+import Project.modules.GameManager;
 import Resources.BattleShipGame;
+import com.sun.org.apache.xml.internal.resolver.readers.ExtendedXMLCatalogReader;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.*;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class XmlLoader {
-    private static final String RESOURCES = "mypackage";
     private static final String XSD_NAME = "BattelShipsGame.xsd";
     private static final String XML_NAME = "BattelShipsGame.xml";
     private static final String SLASH = "/";
@@ -27,9 +18,10 @@ public class XmlLoader {
     private static final String COLUMN = "COLUMN";
     private static final int MAX_BOARD_SIZE = 20;
     private static final int MIN_BOARD_SIZE = 5;
+    private static final int AROUND_SHIP = 5;
     private static int boardSize = 0;
-    private ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer1 = new ArrayList<>();
-    private ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer2 = new ArrayList<>();
+    private static ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer1 = new ArrayList<>();
+    private static ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer2 = new ArrayList<>();
 
     public XmlLoader() {
 
@@ -66,8 +58,7 @@ public class XmlLoader {
         boolean valid = false;
         boolean player1 = true;
         boardSize = battleShip.getBoardSize();
-
-
+        GameManager.setBoardSize(boardSize);
         checkIfBoardSizeLiggal(boardSize);
 
         BattleShipGame.Boards boards = battleShip.getBoards();
@@ -91,7 +82,6 @@ public class XmlLoader {
         setAndCheckBattleShipsLocation(battleShipsPlayer1);
         setAndCheckBattleShipsLocation(battleShipsPlayer2);
 
-
         return true;
     }
 
@@ -103,103 +93,104 @@ public class XmlLoader {
         int indexShip = 1;
         Boolean valid = true;
 
-        for (BattleShipGame.Boards.Board.Ship currentShip : battleShipsPlayer){
-            direction = currentShip.getDirection();
-            position = currentShip.getPosition();
-            length = BattleShipConfig.getShipLengthByShipType(currentShip.getShipTypeId());
-            if(direction.equals(ROW) && valid) {
-                if (position.getY() - 1 >= 0) {
-                    if (boardMat[position.getX()][position.getY() - 1] == 0 ||
-                            boardMat[position.getX()][position.getY() - 1] == 5) {
-                        boardMat[position.getX()][position.getY() - 1] = 5; // check around the battelship
-                    } else {
-                        valid = false;
-                    }
-                }
-
-                for(int i = 0; i < length; i++){
-                    if( boardMat[position.getX()][position.getY()] == 0 ) {
-                        boardMat[position.getX()][position.getY()] = indexShip;
-                        if(position.getX() - 1 >= 0) {
-                            if (boardMat[position.getX() - 1][position.getY()] == 0 ||
-                                    boardMat[position.getX() - 1][position.getY()] == 5) {
-                                boardMat[position.getX() - 1][position.getY()] = 5;
-                            } else {
-                                valid = false;
-                            }
-                        }
-                        if( position.getX() + 1 <= boardSize) {
-                            if (boardMat[position.getX() + 1][position.getY()] == 0 ||
-                                    boardMat[position.getX() + 1][position.getY()] == 5) {
-                                boardMat[position.getX() + 1][position.getY()] = 5;
-                            } else {
-                                valid = false;
-                            }
-                        }
-
-                        if(position.getY() + 1 <= boardSize + 1) {
-                            position.setY(position.getY() + 1);
-                        }
-                        else{
+        try {
+            for (BattleShipGame.Boards.Board.Ship currentShip : battleShipsPlayer) {
+                direction = currentShip.getDirection();
+                position = currentShip.getPosition();
+                int positionX = position.getX();
+                int positionY = position.getY();
+                length = BattleShipConfig.getShipLengthByShipType(currentShip.getShipTypeId());
+                if (direction.equals(ROW) && valid) {
+                    if (positionY - 1 >= 0) {
+                        if (boardMat[positionX][positionY - 1] == 0 ||
+                                boardMat[positionX][positionY - 1] == AROUND_SHIP) {
+                            boardMat[positionX][positionY - 1] = AROUND_SHIP; // check around the battelship
+                        } else {
                             valid = false;
                         }
                     }
-                    else{
-                        valid = false;
-                    }
-                }
-                if( position.getY() <= boardSize + 1){
-                    boardMat[position.getX()][position.getY()] = 5;
-                }
-            }
-            else if(direction.equals(COLUMN) && valid){
-                if( position.getX() - 1 >= 0) {
-                    if (boardMat[position.getX() - 1][position.getY()] == 0 ||
-                            boardMat[position.getX() - 1][position.getY()] == 5) {
-                                boardMat[position.getX() - 1][position.getY()] = 5; // check around the battelship
-                    } else {
-                        valid = false;
-                    }
-                }
-                for(int i = 0; i < length; i++){
-                    if( boardMat[position.getX()][position.getY()] == 0 ) {
-                        boardMat[position.getX()][position.getY()] = indexShip;
-                        if(position.getY() - 1 >= 0) {
-                            if (boardMat[position.getX()][position.getY() - 1] == 0 ||
-                                    boardMat[position.getX()][position.getY() - 1] == 5) {
-                                boardMat[position.getX()][position.getY() - 1] = 5;
-                            } else {
-                                valid = false;
-                            }
-                        }
-                        if( position.getY() + 1 <= boardSize) {
-                            if (boardMat[position.getX()][position.getY() + 1] == 0 ||
-                                    boardMat[position.getX()][position.getY() + 1] == 5) {
-                                boardMat[position.getX()][position.getY() + 1] = 5;
-                            } else {
-                                valid = false;
-                            }
-                        }
 
-                        if(position.getX() + 1 <= boardSize + 1) {
-                            position.setX(position.getX() + 1);
-                        }
-                        else{
+                    for (int i = 0; i < length; i++) {
+                        if (boardMat[positionX][positionY] == 0) {
+                            boardMat[positionX][positionY] = indexShip;
+                            if (positionX - 1 >= 0) {
+                                if (boardMat[positionX - 1][positionY] == 0 ||
+                                        boardMat[positionX - 1][positionY] == AROUND_SHIP) {
+                                    boardMat[positionX - 1][positionY] = AROUND_SHIP;
+                                } else {
+                                    valid = false;
+                                }
+                            }
+                            if (positionX + 1 <= boardSize) {
+                                if (boardMat[positionX + 1][positionY] == 0 ||
+                                        boardMat[positionX + 1][positionY] == AROUND_SHIP) {
+                                    boardMat[positionX + 1][positionY] = AROUND_SHIP;
+                                } else {
+                                    valid = false;
+                                }
+                            }
+
+                            if (positionY + 1 <= boardSize + 1) {
+                                positionY++;
+                            } else {
+                                valid = false;
+                            }
+                        } else {
                             valid = false;
                         }
                     }
-                    else{
-                        valid = false;
+                    if (positionY <= boardSize + 1) {
+                        boardMat[positionX][positionY] = AROUND_SHIP;
+                    }
+                } else if (direction.equals(COLUMN) && valid) {
+                    if (positionX - 1 >= 0) {
+                        if (boardMat[positionX - 1][positionY] == 0 ||
+                                boardMat[positionX - 1][positionY] == AROUND_SHIP) {
+                            boardMat[positionX - 1][positionY] = AROUND_SHIP; // check around the battelship
+                        } else {
+                            valid = false;
+                        }
+                    }
+                    for (int i = 0; i < length; i++) {
+                        if (boardMat[positionX][positionY] == 0) {
+                            boardMat[positionX][positionY] = indexShip;
+                            if (positionY - 1 >= 0) {
+                                if (boardMat[positionX][positionY - 1] == 0 ||
+                                        boardMat[positionX][positionY - 1] == AROUND_SHIP) {
+                                    boardMat[positionX][positionY - 1] = AROUND_SHIP;
+                                } else {
+                                    valid = false;
+                                }
+                            }
+                            if (positionY + 1 <= boardSize) {
+                                if (boardMat[positionX][positionY + 1] == 0 ||
+                                        boardMat[positionX][positionY + 1] == AROUND_SHIP) {
+                                    boardMat[positionX][positionY + 1] = AROUND_SHIP;
+                                } else {
+                                    valid = false;
+                                }
+                            }
+
+                            if (positionX + 1 <= boardSize + 1) {
+                                positionX++;
+                            } else {
+                                valid = false;
+                            }
+                        } else {
+                            valid = false;
+                        }
+                    }
+                    if (positionX <= boardSize) {
+                        boardMat[positionX][positionY] = AROUND_SHIP;
                     }
                 }
-                if( position.getX() <= boardSize + 1){
-                    boardMat[position.getX()][position.getY()] = 5;
-                }
             }
-        }
 
-        if(!valid){
-            System.out.println("Battelships location invalid!");//exeption;
+
+        }catch (Exception e) {
+            if (!valid) {
+                System.out.println("Battelships location invalid!");//exeption;
+            }
         }
 
 //        for(int i = 0; i < boardSize ;i++) {
@@ -217,7 +208,6 @@ public class XmlLoader {
         BattleShipGame.ShipTypes shipTypes = battleShip.getShipTypes();
 
         try {
-
             for (BattleShipGame.ShipTypes.ShipType shipType : shipTypes.getShipType()) {
                 if (shipType.getId().equals("A")) {
                     BattleShipConfig.setShipAmountTypeA(shipType.getAmount());

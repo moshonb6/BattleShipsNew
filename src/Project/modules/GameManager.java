@@ -1,7 +1,11 @@
 package Project.modules;
 
 import Project.UI.UserIteration;
+import Project.UI.XmlLoader;
+import Resources.BattleShipGame;
+
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
@@ -12,15 +16,16 @@ public class GameManager {
     private static final int BOARD_MIN_SIZE = 5;
     private static Player currentPlayer;
     private static Player previousPlayer;
-    private static int boardSize = 6;
+    private static int boardSize;
     private static boolean endGame = false;
     private static int numOfTurns = 0;
     private static long timeStart;
     private static double totalTime;
     private static int battleShipsAmount;
 
+    public static void setBoardSize(int i_boardSize){ boardSize = i_boardSize;}
+
     public void playGame(){
-        //TODO: if no game is loaded, write a massage to user
         initPlayers();
         timeStart = System.currentTimeMillis();
         startGame();
@@ -144,8 +149,39 @@ public class GameManager {
     }
 
     public void initPlayers(){
-        battleShipsAmount = BattleShipConfig.getShipAmountTypeA() + BattleShipConfig.getShipLengthTypeB();
-        currentPlayer = new Player("player1", boardSize, 3);////////////
-        previousPlayer = new Player("player2", boardSize, 3);////////////
+        XmlLoader xml = new XmlLoader();
+        battleShipsAmount = BattleShipConfig.getShipAmountTypeA() + BattleShipConfig.getShipAmountTypeB();
+        BattelShip[] battleShipsPlayer1 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer1());
+        BattelShip[] battleShipsPlayer2 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer2());
+
+        currentPlayer = new Player("player1", boardSize, battleShipsAmount, battleShipsPlayer1);
+        previousPlayer = new Player("player2", boardSize, battleShipsAmount, battleShipsPlayer2);
+    }
+
+    private BattelShip[] createBattleShipsFromShipsArray(ArrayList<BattleShipGame.Boards.Board.Ship> i_shipsArray) {
+        BattelShip[] res = new BattelShip[battleShipsAmount];
+        int index = 0;
+        BattelShip battelShip = new BattelShip();
+
+        for (BattleShipGame.Boards.Board.Ship ship : i_shipsArray) {
+            Point point = new Point(ship.getPosition().getX(), ship.getPosition().getY());
+            if (ship.getShipTypeId().equals("A")) {
+                battelShip = new BattelShip(ship.getShipTypeId(), point, ship.getDirection(),
+                        BattleShipConfig.getShipLengthTypeA(), BattleShipConfig.getShipScoreTypeA());
+            }
+            else if (ship.getShipTypeId().equals("B")) {
+                battelShip = new BattelShip(ship.getShipTypeId(), point, ship.getDirection(),
+                        BattleShipConfig.getShipLengthTypeB(), BattleShipConfig.getShipScoreTypeB());
+            }
+            else if (ship.getShipTypeId().equals("L")) {
+                battelShip = new BattelShip(ship.getShipTypeId(), point, ship.getDirection(),
+                        BattleShipConfig.getShipLengthTypeL(), BattleShipConfig.getShipScoreTypeL());
+            }
+
+            res[index++] = battelShip;
+        }
+
+        return res;
+
     }
 }

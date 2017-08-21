@@ -79,7 +79,6 @@ public final class UserIteration {
                 System.out.println("Please enter a column between: A to " + lastColumn);
                 yChar = reader.next().charAt(0);
                 yChar = Character.toUpperCase(yChar);
-                System.out.println(yChar);
                 if(yChar == EXIT){
                     System.out.println("Player required. Thank you for playing...");
                     exit(1);
@@ -178,5 +177,9 @@ public final class UserIteration {
         String fullPath = reader.next();
 
         return fullPath;
+    }
+
+    public static void loadGameBeforeStartMsg() {
+        System.out.println("Please load a valid game before starting... ");
     }
 }
