@@ -1,10 +1,8 @@
 package Project.UI;
 
 import Project.modules.BattleShipConfig;
-import Project.modules.Board;
 import Project.modules.GameManager;
 import Resources.BattleShipGame;
-import com.sun.org.apache.xml.internal.resolver.readers.ExtendedXMLCatalogReader;
 
 import javax.xml.bind.*;
 import java.io.File;
