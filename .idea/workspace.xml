@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5aba6bd-0411-43ec-afbd-8837e97101f8" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/HelloWorld/Project/BattelShip.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/HelloWorld/Project/Board.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/HelloWorld/Project/GameManager.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/HelloWorld/Project/UI/XmlLoader.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/HelloWorld/Project/player.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/HelloWorld/Resources/battelships_config.fxml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/HelloWorld/XmlLoadrer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/test/Main.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/MainClass.class" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/MainClass.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/Project/UI/UserIteration.class" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/Project/UI/UserIteration.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/Project/UI/XmlLoader.class" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/Project/UI/XmlLoader.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/BattelShip.class" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/BattelShip.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/BattleShipConfig.class" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/BattleShipConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/GameManager.class" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/GameManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/Player.class" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/Project/modules/Player.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BattelShipGame/Resources/BattleShipGame.xml" afterPath="$PROJECT_DIR$/out/production/BattelShipGame/Resources/BattleShipGame.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Project/UI/XmlLoader.java" afterPath="$PROJECT_DIR$/src/Project/UI/XmlLoader.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -80,9 +64,11 @@
       <file leaf-file-name="XmlLoader.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Project/UI/XmlLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="40" lean-forward="false" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
-              <folding />
+            <state relative-caret-position="153">
+              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -379,7 +365,7 @@
       <workItem from="1503246455840" duration="36000" />
       <workItem from="1503305689635" duration="5259000" />
       <workItem from="1503315307442" duration="3702000" />
-      <workItem from="1503321364395" duration="1799000" />
+      <workItem from="1503321364395" duration="3585000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <created>1503307615183</created>
@@ -395,11 +381,18 @@
       <option name="project" value="LOCAL" />
       <updated>1503326527202</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="init commit">
+      <created>1503384621946</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1503384621946</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103251000" />
+    <option name="totallyTimeSpent" value="105037000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -414,7 +407,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40536278" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25256222" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25256222" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -468,7 +461,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/Project/UI/XmlLoader.java</url>
-          <line>85</line>
+          <line>86</line>
           <properties class="Project.UI.XmlLoader" method="setAndCheckBattleShipsLocation">
             <option name="EMULATED" value="true" />
           </properties>
@@ -517,7 +510,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1037">
           <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -585,7 +580,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1241">
           <caret line="73" column="29" lean-forward="false" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -830,9 +827,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Project/UI/XmlLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="40" lean-forward="false" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
-          <folding />
+        <state relative-caret-position="153">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
