@@ -9,8 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-
-
 public class XmlLoader {
     private static final String XSD_NAME = "BattelShipsGame.xsd";
     private static final String XML_NAME = "BattelShipsGame.xml";
