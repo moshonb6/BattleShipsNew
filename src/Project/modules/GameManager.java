@@ -7,6 +7,7 @@ import Resources.BattleShipGame;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.exit;
 
@@ -20,10 +21,23 @@ public class GameManager {
     private static boolean endGame = false;
     private static int numOfTurns = 0;
     private static long timeStart;
-    private static double totalTime;
+    private static long totalTime;
     private static int battleShipsAmount;
 
     public static void setBoardSize(int i_boardSize){ boardSize = i_boardSize;}
+
+    private static String setTotalTimeToString(long i_totalTime)
+    {
+        //hh:mm:ss
+        //int seconds = (int) ((i_totalTime / 1000) % 60 );
+        int seconds = (int)(i_totalTime % 60);
+        //int minutes = (int) (((i_totalTime / (1000*60)) % 60));
+        int minutes = (int) (((i_totalTime % (3600)) / 60));
+        //int hours   = (int) (((i_totalTime / (1000*60*60)) % 24));
+        int hours   = (int) (i_totalTime / 3600);
+        String msg = new String(hours +":"+minutes+":"+seconds);
+        return msg;
+    }
 
     public void playGame(){
         initPlayers();
@@ -37,7 +51,7 @@ public class GameManager {
         int userChoice;
 
         while(!endGame) {
-            userChoice = UserIteration.gameManuMsg();
+            userChoice = UserIteration.gameMenuMsg();
 
             switch (userChoice){
                 case 3:
@@ -58,7 +72,7 @@ public class GameManager {
                     showStatistics(currentPlayer);
                     break;
                 case 6:
-                    UserIteration.printResultsAndStatistics(currentPlayer, previousPlayer, numOfTurns, calculateTotalTime(timeStart));
+                    UserIteration.printResultsAndStatistics(currentPlayer, previousPlayer, numOfTurns, setTotalTimeToString(calculateTotalTime(timeStart)));
                     exit(1);
                     break;
                 case 7:
@@ -81,13 +95,14 @@ public class GameManager {
 
     private void showStatistics(Player player) {
         totalTime = calculateTotalTime(timeStart);
-        UserIteration.showStatisticsMsg(numOfTurns, totalTime, player.getScore(), player.getMissed(), player.getAvgTimeForMove());
+        String totalTimeInMinSec = setTotalTimeToString(totalTime);
+        UserIteration.showStatisticsMsg(numOfTurns, totalTimeInMinSec, player.getScore(), player.getMissed(), player.getAvgTimeForMove());
     }
 
-    public static double calculateTotalTime(long timeStart) {
+    public static long calculateTotalTime(long timeStart) {
         long tEnd = System.currentTimeMillis();
         long tDelta = tEnd - timeStart;
-        double total = tDelta / 1000.0;
+        long total = (long) (tDelta / 1000.0);
 
         return total;
     }
