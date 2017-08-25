@@ -10,7 +10,6 @@ public class MainClass {
         GameManager gameManager = new GameManager();
         int userChoice = UserIteration.MainMsg();
 
-
         switch (userChoice) {
             case 1:
                 try {

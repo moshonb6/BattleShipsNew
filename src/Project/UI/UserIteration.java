@@ -2,10 +2,7 @@ package Project.UI;
 
 import Project.modules.GameManager;
 import Project.modules.Player;
-import com.sun.corba.se.impl.orb.ParserTable;
-
 import java.awt.*;
-import java.sql.Timestamp;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -167,6 +164,24 @@ public final class UserIteration {
         System.out.println("Total score : " + player2.getScore());
         System.out.println("Total missed shots: " + player2.getMissed());
         System.out.println("Avarage time for move: " + player2.getAvgTimeForMove());
+        System.out.println("---------------------");
+    }
+
+    public static void printWinnerResultsAndStatistics(Player winner, Player loser, int i_numOfTurns, String i_totalTime){
+        winner.getMyBoard().printMyBoard(winner);
+        loser.getMyBoard().printMyBoard(loser);
+        System.out.println("THE WINNER IS :" + winner.getName() + "!!!");
+        System.out.println("Amount of turns: " + i_numOfTurns);
+        System.out.println("Total time: " + i_totalTime);
+        System.out.println("------Results " + winner.getName() + " ------");
+        System.out.println("Total score : " + winner.getScore());
+        System.out.println("Total missed shots: " + winner.getMissed());
+        System.out.println("Avarage time for move: " + winner.getAvgTimeForMove() / (double)i_numOfTurns);
+        System.out.println("-------------------------");
+        System.out.println("------Results " + loser.getName() + " ------");
+        System.out.println("Total score : " + loser.getScore());
+        System.out.println("Total missed shots: " + loser.getMissed());
+        System.out.println("Avarage time for move: " + loser.getAvgTimeForMove());
         System.out.println("---------------------");
     }
 

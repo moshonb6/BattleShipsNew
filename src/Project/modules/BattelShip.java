@@ -2,8 +2,6 @@ package Project.modules;
 
 import java.awt.*;
 
-//enum Direction{ROW,COLUMN}
-
 public class BattelShip {
     private String type;
     private Point position;

@@ -1,10 +1,5 @@
 package Project.modules;
 
-import Resources.BattleShipGame;
-
-import java.awt.*;
-import java.util.ArrayList;
-
 public class BattleShipConfig {
     private static int shipAmountTypeA = 0;
     private static int shipAmountTypeB = 0;

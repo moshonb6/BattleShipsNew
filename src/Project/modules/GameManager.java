@@ -3,11 +3,8 @@ package Project.modules;
 import Project.UI.UserIteration;
 import Project.UI.XmlLoader;
 import Resources.BattleShipGame;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.exit;
 
@@ -28,12 +25,8 @@ public class GameManager {
 
     private static String setTotalTimeToString(long i_totalTime)
     {
-        //hh:mm:ss
-        //int seconds = (int) ((i_totalTime / 1000) % 60 );
         int seconds = (int)(i_totalTime % 60);
-        //int minutes = (int) (((i_totalTime / (1000*60)) % 60));
         int minutes = (int) (((i_totalTime % (3600)) / 60));
-        //int hours   = (int) (((i_totalTime / (1000*60*60)) % 24));
         int hours   = (int) (i_totalTime / 3600);
         String msg = new String(hours +":"+minutes+":"+seconds);
         return msg;
@@ -133,7 +126,17 @@ public class GameManager {
             playerTurn.updateHit(goodHit, hit, battelshipAmmount);
 
             if(playerWin(attackedMat)){
-                UserIteration.printWinMsg(currentPlayer, previousPlayer);
+                Player winner, loser;
+                if(currentPlayer.getScore() > previousPlayer.getScore()){
+                    winner = currentPlayer;
+                    loser = previousPlayer;
+                }
+                else{
+                    winner = previousPlayer;
+                    loser = currentPlayer;
+                }
+                UserIteration.printWinnerResultsAndStatistics(winner, loser, numOfTurns,
+                        setTotalTimeToString(calculateTotalTime(timeStart)));
                 endGame = true;
             }
         }

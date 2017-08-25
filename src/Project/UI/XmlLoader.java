@@ -3,7 +3,6 @@ package Project.UI;
 import Project.modules.BattleShipConfig;
 import Project.modules.GameManager;
 import Resources.BattleShipGame;
-
 import javax.xml.bind.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -109,6 +108,7 @@ public class XmlLoader {
                             valid = false;
                             int tmpY = positionY-1;
                             msg = "There is a battle ship near square ["+positionX+","+tmpY+"].";
+                            throw new Exception(msg);
                         }
                     }
 
@@ -123,6 +123,7 @@ public class XmlLoader {
                                     valid = false;
                                     int tmpX = positionX-1;
                                     msg = "There is a battle ship near square ["+tmpX+","+positionY+"].";
+                                    throw new Exception(msg);
 
                                 }
                             }
@@ -134,7 +135,7 @@ public class XmlLoader {
                                     valid = false;
                                     int tmpX = positionX+1;
                                     msg = "There is a battle ship near square ["+tmpX+","+positionY+"].";
-
+                                    throw new Exception(msg);
                                 }
                             }
 
@@ -143,10 +144,12 @@ public class XmlLoader {
                             } else {
                                 valid = false;
                                 msg = "There is a battle ship near square ["+positionX+","+positionY+"].";
+                                throw new Exception(msg);
                             }
                         } else {
                             valid = false;
                             msg = "There is a battle ship near square ["+positionX+","+positionY+"].";
+                            throw new Exception(msg);
                         }
                     }
                     if (positionY <= boardSize + 1) {
@@ -161,6 +164,7 @@ public class XmlLoader {
                             valid = false;
                             int tmpX = positionX-1;
                             msg = "There is a battle ship near square ["+tmpX+","+positionY+"].";
+                            throw new Exception(msg);
                         }
                     }
                     for (int i = 0; i < length; i++) {
@@ -174,6 +178,7 @@ public class XmlLoader {
                                     valid = false;
                                     int tmpY = positionY-1;
                                     msg = "There is a battle ship near square ["+positionX+","+tmpY+"].";
+                                    throw new Exception(msg);
                                 }
                             }
                             if (positionY + 1 <= boardSize) {
@@ -184,16 +189,24 @@ public class XmlLoader {
                                     valid = false;
                                     int tmpY = positionY+1;
                                     msg = "There is a battle ship near square ["+positionX+","+tmpY+"].";
+                                    throw new Exception(msg);
                                 }
                             }
 
                             if (positionX + 1 <= boardSize + 1) {
                                 positionX++;
                             } else {
-                                valid = false;
+                                msg = "There is a battle ship out of the board range";
+                                throw new Exception(msg);
                             }
-                        } else {
+                        } else if(boardMat[positionX][positionY] == AROUND_SHIP) {
                             valid = false;
+                            msg = "There is a battle ship near square ["+positionX+","+positionY+"].";
+                            throw new Exception(msg);
+                        } else{
+                            valid = false;
+                            msg = "There is a battle ship on battle ship!";
+                            throw new Exception(msg);
                         }
                     }
                     if (positionX <= boardSize) {
@@ -201,11 +214,9 @@ public class XmlLoader {
                     }
                 }
             }
-
-
         }catch (Exception e) {
             if (!valid) {
-                System.out.println("Battelships location is invalid! " + msg);//exeption;
+                System.out.println("Battelships location is invalid! " + msg);
             }
         }
 

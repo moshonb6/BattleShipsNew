@@ -6,13 +6,13 @@
     <shipType id="A">
       <category>REGULAR</category>
       <amount>1</amount>
-      <length>3</length>
+      <length>5</length>
       <score>3</score>
     </shipType>
     <shipType id="B">
       <category>REGULAR</category>
       <amount>1</amount>
-      <length>4</length>
+      <length>1</length>
       <score>3</score>
     </shipType>
   </shipTypes>
@@ -30,7 +30,7 @@
       </ship>
       <!--1 or more repetitions:-->
       <ship>
-        <shipTypeId>A</shipTypeId>
+        <shipTypeId>B</shipTypeId>
         <position x="2" y="2"/>
         <direction>ROW</direction>
       </ship>
@@ -39,13 +39,13 @@
       <!--1 or more repetitions:-->
       <ship>
         <shipTypeId>B</shipTypeId>
-        <position x="0" y="0"/>
+        <position x="1" y="1"/>
         <direction>COLUMN</direction>
       </ship>
       1 or more repetitions:
       <ship>
         <shipTypeId>A</shipTypeId>
-        <position x="0" y="2"/>
+        <position x="1" y="3"/>
         <direction>COLUMN</direction>
       </ship>
     </board>
