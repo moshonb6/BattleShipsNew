@@ -3,10 +3,8 @@ package Project.modules;
 import Project.UI.UserIteration;
 import Project.UI.XmlLoader;
 import Resources.BattleShipGame;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import static java.lang.System.exit;
 
@@ -20,10 +18,20 @@ public class GameManager {
     private static boolean endGame = false;
     private static int numOfTurns = 0;
     private static long timeStart;
-    private static double totalTime;
+    private static long totalTime;
     private static int battleShipsAmount;
+    private static int minesAmount;
 
     public static void setBoardSize(int i_boardSize){ boardSize = i_boardSize;}
+
+    private static String setTotalTimeToString(long i_totalTime)
+    {
+        int seconds = (int)(i_totalTime % 60);
+        int minutes = (int) (((i_totalTime % (3600)) / 60));
+        int hours   = (int) (i_totalTime / 3600);
+        String msg = new String(hours +":"+minutes+":"+seconds);
+        return msg;
+    }
 
     public void playGame(){
         initPlayers();
@@ -37,7 +45,7 @@ public class GameManager {
         int userChoice;
 
         while(!endGame) {
-            userChoice = UserIteration.gameManuMsg();
+            userChoice = UserIteration.gameMenuMsg();
 
             switch (userChoice){
                 case 3:
@@ -58,7 +66,7 @@ public class GameManager {
                     showStatistics(currentPlayer);
                     break;
                 case 6:
-                    UserIteration.printResultsAndStatistics(currentPlayer, previousPlayer, numOfTurns, calculateTotalTime(timeStart));
+                    UserIteration.printResultsAndStatistics(currentPlayer, previousPlayer, numOfTurns, setTotalTimeToString(calculateTotalTime(timeStart)));
                     exit(1);
                     break;
                 case 7:
@@ -81,13 +89,14 @@ public class GameManager {
 
     private void showStatistics(Player player) {
         totalTime = calculateTotalTime(timeStart);
-        UserIteration.showStatisticsMsg(numOfTurns, totalTime, player.getScore(), player.getMissed(), player.getAvgTimeForMove());
+        String totalTimeInMinSec = setTotalTimeToString(totalTime);
+        UserIteration.showStatisticsMsg(numOfTurns, totalTimeInMinSec, player.getScore(), player.getMissed(), player.getAvgTimeForMove());
     }
 
-    public static double calculateTotalTime(long timeStart) {
+    public static long calculateTotalTime(long timeStart) {
         long tEnd = System.currentTimeMillis();
         long tDelta = tEnd - timeStart;
-        double total = tDelta / 1000.0;
+        long total = (long) (tDelta / 1000.0);
 
         return total;
     }
@@ -118,7 +127,17 @@ public class GameManager {
             playerTurn.updateHit(goodHit, hit, battelshipAmmount);
 
             if(playerWin(attackedMat)){
-                UserIteration.printWinMsg(currentPlayer, previousPlayer);
+                Player winner, loser;
+                if(currentPlayer.getScore() > previousPlayer.getScore()){
+                    winner = currentPlayer;
+                    loser = previousPlayer;
+                }
+                else{
+                    winner = previousPlayer;
+                    loser = currentPlayer;
+                }
+                UserIteration.printWinnerResultsAndStatistics(winner, loser, numOfTurns,
+                        setTotalTimeToString(calculateTotalTime(timeStart)));
                 endGame = true;
             }
         }
@@ -150,12 +169,13 @@ public class GameManager {
 
     public void initPlayers(){
         XmlLoader xml = new XmlLoader();
-        battleShipsAmount = BattleShipConfig.getShipAmountTypeA() + BattleShipConfig.getShipAmountTypeB();
+        minesAmount = BattleShipConfig.getMinesAmount();
+        battleShipsAmount = BattleShipConfig.getShipAmountTypeA() + BattleShipConfig.getShipAmountTypeB() + BattleShipConfig.getShipAmountTypeL();
         BattelShip[] battleShipsPlayer1 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer1());
         BattelShip[] battleShipsPlayer2 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer2());
 
-        currentPlayer = new Player("player1", boardSize, battleShipsAmount, battleShipsPlayer1);
-        previousPlayer = new Player("player2", boardSize, battleShipsAmount, battleShipsPlayer2);
+        currentPlayer = new Player("player1", boardSize, battleShipsAmount, battleShipsPlayer1, minesAmount);
+        previousPlayer = new Player("player2", boardSize, battleShipsAmount, battleShipsPlayer2, minesAmount);
     }
 
     private BattelShip[] createBattleShipsFromShipsArray(ArrayList<BattleShipGame.Boards.Board.Ship> i_shipsArray) {

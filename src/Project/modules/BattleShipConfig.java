@@ -1,10 +1,5 @@
 package Project.modules;
 
-import Resources.BattleShipGame;
-
-import java.awt.*;
-import java.util.ArrayList;
-
 public class BattleShipConfig {
     private static int shipAmountTypeA = 0;
     private static int shipAmountTypeB = 0;
@@ -15,10 +10,14 @@ public class BattleShipConfig {
     private static int shipScoreTypeA = 0;
     private static int shipScoreTypeB = 0;
     private static int shipScoreTypeL = 0;
+    private static int minesAmount = 0;
 
     private BattleShipConfig(){
 
     }
+
+    public static void setMinesAmount(int amount){minesAmount = amount;}
+    public static int getMinesAmount(){return  minesAmount;}
 
     public static void setShipAmountTypeA(int amount){shipAmountTypeA = amount;}
     public static void setShipAmountTypeB(int amount){shipAmountTypeB = amount;}

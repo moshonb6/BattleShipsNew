@@ -1,9 +1,6 @@
 package Project.modules;
 
 import Project.UI.UserIteration;
-import Project.modules.BattelShip;
-import Project.modules.Board;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.awt.*;
 
@@ -20,19 +17,21 @@ public class Player {
     private int boardSize;
     private static final String ROW = "ROW";
     private static final String COLUMN = "COLUMN";
+    private static final String RIGHT_DOWN = "RIGHT_DOWN";
+    private static final String DOWN_RIGHT = "DOWN_RIGHT";
     private BattelShip[] battelShipsArray;
     private int numOfBattelships;
     private long avgTimeForMove;
-    private int minesLeft;
-    private final int MAX_MINES = 2;
+    private static int minesLeft;
+    private static int minesAmount;
 
-    public Player(String i_name,int i_boardSize, int i_numOfBattelships, BattelShip[] i_battelShips){
+    public Player(String i_name,int i_boardSize, int i_numOfBattelships, BattelShip[] i_battelShips, int i_mines){
         name = i_name;
         boardSize = i_boardSize;
         myBoardMat = new int[boardSize][boardSize];
         oponentBoardMat = new int[boardSize][boardSize];
         numOfBattelships = i_numOfBattelships;
-        minesLeft = MAX_MINES;
+        minesLeft = i_mines;
         battelShipsArray = new BattelShip[numOfBattelships];
         System.arraycopy(i_battelShips, 0, battelShipsArray, 0 ,i_numOfBattelships);
         myBoard = createMyBoard();
@@ -93,7 +92,27 @@ public class Player {
                 x++;
             }
         }
-        else{
+        else if (battelShip.getDirection().equals(ROW)){
+            for (int i = 0; i < battelShip.getLength(); i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                y++;
+            }
+        }else if (battelShip.getDirection().equals(RIGHT_DOWN)){
+            for (int i = 0; i < battelShip.getLength(); i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                y++;
+            }
+            y--;
+            for (int i = 0; i < battelShip.getLength(); i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                x++;
+            }
+        }else if (battelShip.getDirection().equals(DOWN_RIGHT)){
+            for (int i = 0; i < battelShip.getLength(); i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                x++;
+            }
+            x--;
             for (int i = 0; i < battelShip.getLength(); i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
                 y++;

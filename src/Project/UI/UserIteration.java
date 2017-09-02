@@ -2,8 +2,6 @@ package Project.UI;
 
 import Project.modules.GameManager;
 import Project.modules.Player;
-import com.sun.corba.se.impl.orb.ParserTable;
-
 import java.awt.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -24,7 +22,7 @@ public final class UserIteration {
                 System.out.println("2. Play new game");
                 System.out.println("6. Exit");
                 System.out.println("--------BattelShips Game--------");
-                System.out.println("Please choose a number from the manu:");
+                System.out.println("Please choose a number from the menu:");
                 userChoice = reader.nextInt();
             } catch (InputMismatchException e) {
                 System.out.print("Invalid number. ");
@@ -37,7 +35,7 @@ public final class UserIteration {
         return userChoice;
     }
 
-    public static int gameManuMsg(){
+    public static int gameMenuMsg(){
         Scanner reader = new Scanner(System.in);
         int userChoice = 0;
 
@@ -50,7 +48,7 @@ public final class UserIteration {
                 System.out.println("6. Exit");
                 System.out.println("7. Put Mine");
                 System.out.println("--------BattelShips Game--------");
-                System.out.println("Please choose a number from the manu:");
+                System.out.println("Please choose a number from the menu:");
                 userChoice = reader.nextInt();
             } catch (InputMismatchException e) {
                 System.out.print("Invalid number. ");
@@ -66,8 +64,8 @@ public final class UserIteration {
     public static Point getPointFromPlayer(Player player, int boardSize){
         int asciBoardSize = 64 + boardSize;
         char lastColumn = (char)asciBoardSize;
-        int x, y;
-        char yChar;
+        int x = 0, y;
+        char yChar = 'A';
         Scanner reader = new Scanner(System.in);
         Point hit = new Point(0,0);
         boolean validHit = false;
@@ -89,7 +87,7 @@ public final class UserIteration {
                 validHit = checkIfHitIsValid(x -1,y, boardSize);
                 hit.setLocation(x -1 , y);
             }catch (InputMismatchException e){
-                System.out.print("Invalid Hit. ");
+                System.out.println("["+yChar+","+(x+1)+"] square doesn't exist!");
             }
             reader.nextLine();
         }
@@ -100,10 +98,20 @@ public final class UserIteration {
     }
 
     private static boolean checkIfHitIsValid(int x, int y, int boardSize) {
+        char inputChar = (char)( 'A'+ y);
         if(y >= 0 && y <= boardSize && x >= 0 && x <= boardSize){
             return true;
         }
-        System.out.println("your hit is out of the board!");
+        if(boardSize < y)
+        {
+            System.out.println("There isn't a "+inputChar+" column in this board!");
+
+        }
+        else if(x < 0 || boardSize < x)
+        {
+            System.out.println("There isn't a "+(x+1)+" row in this board!");
+        }
+        System.out.println("["+inputChar+","+(x+1)+"] square doesn't exist!");
         return false;
     }
 
@@ -130,7 +138,7 @@ public final class UserIteration {
         }
     }
 
-    public static void showStatisticsMsg(int i_numOfTurns, double i_totalTime, int i_score, int i_missed, long i_avgTimeForMove){
+    public static void showStatisticsMsg(int i_numOfTurns, String i_totalTime, int i_score, int i_missed, long i_avgTimeForMove){
         System.out.println("------Statistics------");
         System.out.println("Amount of turns: " + i_numOfTurns);
         System.out.println("Total time: " + i_totalTime);
@@ -140,7 +148,7 @@ public final class UserIteration {
         System.out.println("------Statistics------");
     }
 
-    public static void printResultsAndStatistics(Player player1, Player player2, int i_numOfTurns, double i_totalTime){
+    public static void printResultsAndStatistics(Player player1, Player player2, int i_numOfTurns, String i_totalTime){
         player1.getMyBoard().printMyBoard(player1);
         player2.getMyBoard().printMyBoard(player2);
         System.out.println(player1.getName() + " Retired from the game");
@@ -156,6 +164,24 @@ public final class UserIteration {
         System.out.println("Total score : " + player2.getScore());
         System.out.println("Total missed shots: " + player2.getMissed());
         System.out.println("Avarage time for move: " + player2.getAvgTimeForMove());
+        System.out.println("---------------------");
+    }
+
+    public static void printWinnerResultsAndStatistics(Player winner, Player loser, int i_numOfTurns, String i_totalTime){
+        winner.getMyBoard().printMyBoard(winner);
+        loser.getMyBoard().printMyBoard(loser);
+        System.out.println("THE WINNER IS :" + winner.getName() + "!!!");
+        System.out.println("Amount of turns: " + i_numOfTurns);
+        System.out.println("Total time: " + i_totalTime);
+        System.out.println("------Results " + winner.getName() + " ------");
+        System.out.println("Total score : " + winner.getScore());
+        System.out.println("Total missed shots: " + winner.getMissed());
+        System.out.println("Avarage time for move: " + winner.getAvgTimeForMove() / (double)i_numOfTurns);
+        System.out.println("-------------------------");
+        System.out.println("------Results " + loser.getName() + " ------");
+        System.out.println("Total score : " + loser.getScore());
+        System.out.println("Total missed shots: " + loser.getMissed());
+        System.out.println("Avarage time for move: " + loser.getAvgTimeForMove());
         System.out.println("---------------------");
     }
 
