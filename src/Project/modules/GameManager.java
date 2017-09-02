@@ -20,6 +20,7 @@ public class GameManager {
     private static long timeStart;
     private static long totalTime;
     private static int battleShipsAmount;
+    private static int minesAmount;
 
     public static void setBoardSize(int i_boardSize){ boardSize = i_boardSize;}
 
@@ -168,12 +169,13 @@ public class GameManager {
 
     public void initPlayers(){
         XmlLoader xml = new XmlLoader();
-        battleShipsAmount = BattleShipConfig.getShipAmountTypeA() + BattleShipConfig.getShipAmountTypeB();
+        minesAmount = BattleShipConfig.getMinesAmount();
+        battleShipsAmount = BattleShipConfig.getShipAmountTypeA() + BattleShipConfig.getShipAmountTypeB() + BattleShipConfig.getShipAmountTypeL();
         BattelShip[] battleShipsPlayer1 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer1());
         BattelShip[] battleShipsPlayer2 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer2());
 
-        currentPlayer = new Player("player1", boardSize, battleShipsAmount, battleShipsPlayer1);
-        previousPlayer = new Player("player2", boardSize, battleShipsAmount, battleShipsPlayer2);
+        currentPlayer = new Player("player1", boardSize, battleShipsAmount, battleShipsPlayer1, minesAmount);
+        previousPlayer = new Player("player2", boardSize, battleShipsAmount, battleShipsPlayer2, minesAmount);
     }
 
     private BattelShip[] createBattleShipsFromShipsArray(ArrayList<BattleShipGame.Boards.Board.Ship> i_shipsArray) {
