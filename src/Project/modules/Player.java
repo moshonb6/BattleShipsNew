@@ -19,6 +19,8 @@ public class Player {
     private static final String COLUMN = "COLUMN";
     private static final String RIGHT_DOWN = "RIGHT_DOWN";
     private static final String DOWN_RIGHT = "DOWN_RIGHT";
+    private static final String UP_RIGHT = "UP_RIGHT";
+    private static final String RIGHT_UP = "RIGHT_UP";
     private BattelShip[] battelShipsArray;
     private int numOfBattelships;
     private long avgTimeForMove;
@@ -85,52 +87,90 @@ public class Player {
     private  void  createBattleShip(BattelShip battelShip){
         int x = battelShip.getPosition().x;
         int y = battelShip.getPosition().y;
+        int length = battelShip.getLength();
 
         if(battelShip.getDirection().equals(COLUMN)) {
-            for (int i = 0; i < battelShip.getLength(); i++) {
+            for (int i = 0; i < length; i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
                 x++;
             }
         }
         else if (battelShip.getDirection().equals(ROW)){
-            for (int i = 0; i < battelShip.getLength(); i++) {
+            for (int i = 0; i < length; i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
                 y++;
             }
         }else if (battelShip.getDirection().equals(RIGHT_DOWN)){
-            for (int i = 0; i < battelShip.getLength(); i++) {
+            for (int i = 0; i < length; i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
-                y++;
+                y--;
             }
-            y--;
-            for (int i = 0; i < battelShip.getLength(); i++) {
+            y = battelShip.getPosition().y;
+            for (int i = 0; i < length; i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
                 x++;
             }
         }else if (battelShip.getDirection().equals(DOWN_RIGHT)){
-            for (int i = 0; i < battelShip.getLength(); i++) {
+            for (int i = 0; i < length; i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                x--;
+            }
+            x = battelShip.getPosition().x;
+            for (int i = 0; i < length; i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                y++;
+            }
+        }else if (battelShip.getDirection().equals(RIGHT_UP)){
+            for (int i = 0; i < length; i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                x--;
+            }
+            x = battelShip.getPosition().x;
+            for (int i = 0; i < length; i++) {
+                myBoardMat[x][y] = battelShip.getShipValue();
+                y--;
+            }
+        }else if (battelShip.getDirection().equals(UP_RIGHT)){
+            for (int i = 0; i < length; i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
                 x++;
             }
-            x--;
-            for (int i = 0; i < battelShip.getLength(); i++) {
+            x = battelShip.getPosition().x;
+            for (int i = 0; i < length; i++) {
                 myBoardMat[x][y] = battelShip.getShipValue();
                 y++;
             }
         }
     }
 
-    public void updateHit(boolean i_goodHit, Point i_hit, int battleShipValue){
+    public void updateHitOnTrackingBoard(boolean i_goodHit, Point i_hit, int battleShipValue){
         shots++;
 
         if(i_goodHit){
             addHitOnTrackingBoard(i_hit.x,i_hit.y);
-            score ++;
+            score += battleShipValue;
         }
         else{
             signAttackOnTrackingBoard(i_hit.x,i_hit.y);
             missed++;
         }
+    }
+
+    public void updateHitInAttackedMat(boolean i_goodHit, Point i_hit){
+        if(i_goodHit) {
+            addHitOnMyBoard(i_hit.x, i_hit.y);
+        }
+        else{
+            signAttackOnMyBoard(i_hit.x,i_hit.y);
+        }
+    }
+
+    private void signAttackOnMyBoard(int x, int y) {
+        myBoardMat[x][y] = -3;
+    }
+
+    private void addHitOnMyBoard(int x, int y) {
+        myBoardMat[x][y] = -1;
     }
 
     public void addHitOnTrackingBoard(int x, int y){

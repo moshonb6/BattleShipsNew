@@ -26,11 +26,12 @@ public class XmlLoader {
     private static ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer2 = new ArrayList<>();
 
     public XmlLoader() {
-
+        battleShipsPlayer1.clear();
+        battleShipsPlayer2.clear();
     }
 
-    public ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer1(){return battleShipsPlayer1;}
-    public ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer2(){return battleShipsPlayer2;}
+    public static ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer1(){return battleShipsPlayer1;}
+    public static ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer2(){return battleShipsPlayer2;}
 
 
     public Boolean loadBattelShipsConfig() throws Exception{
@@ -117,21 +118,21 @@ public class XmlLoader {
 
             } else if (direction.equals(RIGHT_DOWN) && valid) {
                 shipIndex++;
-                valid &= checkDirectionRow(boardMat, positionX, positionY, length, shipIndex);
-                valid &= checkDirectionColumn(boardMat, positionX, positionY + length - 1, length, shipIndex);
+                valid &= checkDirectionRow(boardMat, positionX, positionY - length + 1, length, shipIndex);
+                valid &= checkDirectionColumn(boardMat, positionX, positionY, length, shipIndex);
             } else if (direction.equals(DOWN_RIGHT) && valid) {
                 shipIndex++;
-                valid &= checkDirectionColumn(boardMat, positionX, positionY, length, shipIndex);
-                valid &= checkDirectionRow(boardMat, positionX + length - 1, positionY, length, shipIndex);
-            } else if (direction.equals(RIGHT_UP) && valid) {//TODO
+                valid &= checkDirectionColumn(boardMat, positionX - length +1, positionY, length, shipIndex);
+                valid &= checkDirectionRow(boardMat, positionX, positionY, length, shipIndex);
+            } else if (direction.equals(RIGHT_UP) && valid) {
                 shipIndex++;
-                valid &= checkDirectionRow(boardMat, positionX , positionY, length, shipIndex);
-                valid &= checkDirectionColumn(boardMat, positionX + length -1, positionY - length -1, length, shipIndex);
+                valid &= checkDirectionRow(boardMat, positionX , positionY - length + 1, length, shipIndex);
+                valid &= checkDirectionColumn(boardMat, positionX - length + 1 , positionY , length, shipIndex);
 
-            } else if (direction.equals(UP_RIGHT) && valid) {//TODO
+            } else if (direction.equals(UP_RIGHT) && valid) {
                 shipIndex++;
-                valid &= checkDirectionColumn(boardMat, positionX, positionY - length -1, length, shipIndex);
-                valid &= checkDirectionRow(boardMat, positionX + length - 1, positionY, length, shipIndex);
+                valid &= checkDirectionColumn(boardMat, positionX, positionY, length, shipIndex);
+                valid &= checkDirectionRow(boardMat, positionX,  positionY, length, shipIndex);
             }
         }
 
@@ -139,13 +140,13 @@ public class XmlLoader {
             throw new Exception("Battelships location is invalid! " + msg);
         }
 
-//        for (int i = 0; i < boardSize; i++) {
-//            for (int j = 0; j < boardSize; j++) {
-//                System.out.print(" " + boardMat[i][j] + " ");
-//            }
-//            System.out.print("\n");
-//        }
-//        System.out.print("---------------------------------\n");
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                System.out.print(" " + boardMat[i][j] + " ");
+            }
+            System.out.print("\n");
+        }
+        System.out.print("---------------------------------\n");
 
 
 
@@ -190,7 +191,7 @@ public class XmlLoader {
                             throw new Exception(msg);
                         }
                     }
-                    if (positionY + 1 <= boardSize) {
+                    if (positionY + 1 < boardSize) {
                         if (boardMat[positionX][positionY + 1] == 0 ||
                                 boardMat[positionX][positionY + 1] >= AROUND_SHIP) {
                             boardMat[positionX][positionY + 1] = AROUND_MY_SHIP;
@@ -266,7 +267,7 @@ public class XmlLoader {
 
                         }
                     }
-                    if (positionX + 1 <= boardSize) {
+                    if (positionX + 1  < boardSize) {
                         if (boardMat[positionX + 1][positionY] == 0 ||
                                 boardMat[positionX + 1][positionY] >= AROUND_SHIP) {
                             boardMat[positionX + 1][positionY] = AROUND_MY_SHIP;

@@ -54,6 +54,11 @@ public class Board {
                     mat_y++;
 
                 }
+                else if(myBoardMat[mat_x][mat_y] == -3 ){
+                    System.out.print("_-_|");
+                    mat_y++;
+
+                }
                 else {
                     System.out.print("___|");
                     mat_y++;

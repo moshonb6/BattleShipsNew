@@ -43,6 +43,7 @@ public class GameManager {
         Point hit;
         boolean goodHit;
         int userChoice;
+        endGame = false;
 
         while(!endGame) {
             userChoice = UserIteration.gameMenuMsg();
@@ -67,13 +68,12 @@ public class GameManager {
                     break;
                 case 6:
                     UserIteration.printResultsAndStatistics(currentPlayer, previousPlayer, numOfTurns, setTotalTimeToString(calculateTotalTime(timeStart)));
-                    exit(1);
+                    endGame = true;
                     break;
                 case 7:
                     putMine();
             }
         }
-
     }
 
     private void putMine() {
@@ -124,7 +124,8 @@ public class GameManager {
             battelshipAmmount = attackedMat[hit.x][hit.y];
             UserIteration.goodShotMsg();
             attackedMat[hit.x][hit.y] = -1;
-            playerTurn.updateHit(goodHit, hit, battelshipAmmount);
+            playerTurn.updateHitOnTrackingBoard(goodHit, hit, battelshipAmmount);
+            previousPlayer.updateHitInAttackedMat(goodHit, hit);
 
             if(playerWin(attackedMat)){
                 Player winner, loser;
@@ -147,11 +148,13 @@ public class GameManager {
             attackedMat[hit.x][hit.y] = 0; //delete the mine from board
             playerTurn.selfAttack(hit);
             playerTurn.signAttackOnTrackingBoard(hit.x,hit.y);
+            previousPlayer.updateHitInAttackedMat(goodHit, hit);
         }
         else{
             goodHit =  false;
             UserIteration.badShotMsg();
-            playerTurn.updateHit(goodHit, hit, battelshipAmmount);
+            playerTurn.updateHitOnTrackingBoard(goodHit, hit, battelshipAmmount);
+            previousPlayer.updateHitInAttackedMat(goodHit, hit);
         }
 
         return goodHit;
@@ -168,11 +171,10 @@ public class GameManager {
     }
 
     public void initPlayers(){
-        XmlLoader xml = new XmlLoader();
         minesAmount = BattleShipConfig.getMinesAmount();
         battleShipsAmount = BattleShipConfig.getShipAmountTypeA() + BattleShipConfig.getShipAmountTypeB() + BattleShipConfig.getShipAmountTypeL();
-        BattelShip[] battleShipsPlayer1 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer1());
-        BattelShip[] battleShipsPlayer2 = createBattleShipsFromShipsArray(xml.getBattleShipsPlayer2());
+        BattelShip[] battleShipsPlayer1 = createBattleShipsFromShipsArray(XmlLoader.getBattleShipsPlayer1());
+        BattelShip[] battleShipsPlayer2 = createBattleShipsFromShipsArray(XmlLoader.getBattleShipsPlayer2());
 
         currentPlayer = new Player("player1", boardSize, battleShipsAmount, battleShipsPlayer1, minesAmount);
         previousPlayer = new Player("player2", boardSize, battleShipsAmount, battleShipsPlayer2, minesAmount);

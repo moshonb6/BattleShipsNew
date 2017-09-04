@@ -23,6 +23,7 @@ public class MainClass {
             case 2:
                 if(gameLoaded) {
                     gameManager.playGame();
+                    main(args);
                 }
                 else{
                     UserIteration.loadGameBeforeStartMsg();
