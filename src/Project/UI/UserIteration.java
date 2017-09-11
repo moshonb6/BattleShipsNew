@@ -208,4 +208,6 @@ public final class UserIteration {
     public static void loadGameBeforeStartMsg() {
         System.out.println("Please load a valid game before starting... ");
     }
+
+    public static void loadGameCompleteMsg() {System.out.println("Game loaded successfully!"); }
 }

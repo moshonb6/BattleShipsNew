@@ -16,15 +16,7 @@ public class Board {
         int mat_x = 0;
         int mat_y = 0;
 
-        for(int i = 0; i < boardSize ;i++) {
-            for (int j = 0; j < boardSize ; j++) {
-                System.out.print( " " + myBoardMat[i][j] + " ");
-            }
-            System.out.print("\n");
-        }
-        System.out.print("------------moshe---------------------\n");
-
-        System.out.print(player.getName() + " Score: " + player.getScore() + " Time: \n");
+        System.out.println(player.getName() + " Score: " + player.getScore());
         System.out.print("--------My Board--------\n");
 
         for(int i = 0; i < boardSize + 1;i++){

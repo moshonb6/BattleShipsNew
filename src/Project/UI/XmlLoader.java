@@ -6,11 +6,13 @@ import Resources.BattleShipGame;
 import javax.xml.bind.*;
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class XmlLoader {
     private static final String XSD_NAME = "BattelShipsGame.xsd";
     private static final String XML_NAME = "BattelShipsGame.xml";
+    private static final String FULLPATH = "src\\Resources\\BattleShipGame.xml";
     private static final String SLASH = "/";
     private static final String ROW = "ROW";
     private static final String COLUMN = "COLUMN";
@@ -24,36 +26,26 @@ public class XmlLoader {
     private static int boardSize = 0;
     private static ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer1 = new ArrayList<>();
     private static ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer2 = new ArrayList<>();
+    private static ArrayList<BattleShipConfig> battleShipConfigs;
+    public static ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer1(){return battleShipsPlayer1;}
+    public static ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer2(){return battleShipsPlayer2;}
+    public static ArrayList<BattleShipConfig> getBattleShipConfigs(){return battleShipConfigs;}
 
     public XmlLoader() {
         battleShipsPlayer1.clear();
         battleShipsPlayer2.clear();
     }
 
-    public static ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer1(){return battleShipsPlayer1;}
-    public static ArrayList<BattleShipGame.Boards.Board.Ship> getBattleShipsPlayer2(){return battleShipsPlayer2;}
-
-
     public Boolean loadBattelShipsConfig() throws Exception{
-        try {
-            Boolean valid;
-            //String fullPath = UserIteration.getFullPathMsg();
-            JAXBContext jc = JAXBContext.newInstance(BattleShipGame.class);
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-            File xml = new File("src\\Resources\\BattleShipGame.xml");
-            BattleShipGame battleShip = (BattleShipGame) unmarshaller.unmarshal(xml);
-            valid = inputValidation(battleShip);
+        Boolean valid;
+        String fullPath = UserIteration.getFullPathMsg();
+        JAXBContext jc = JAXBContext.newInstance(BattleShipGame.class);
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        File xml = new File(fullPath);
+        BattleShipGame battleShip = (BattleShipGame) unmarshaller.unmarshal(xml);
+        valid = inputValidation(battleShip);
 
-            return valid;
-
-        }catch (Exception e){
-            if (e.getClass() != JAXBException.class && e.getClass() != UnmarshalException.class){
-                throw new Exception("Failed to load schema file", e);
-            }
-            else{
-                throw new Exception("Failed to load xml file", e);
-            }
-        }
+        return valid;
 
     }
 
@@ -63,31 +55,107 @@ public class XmlLoader {
         boardSize = battleShip.getBoardSize();
         GameManager.setBoardSize(boardSize);
         checkIfBoardSizeLiggal(boardSize);
+        Map<String,Integer> amountByIdPlayer1 = new HashMap<>();
+        Map<String,Integer> amountByIdPlayer2 = new HashMap<>();
 
         BattleShipGame.Boards boards = battleShip.getBoards();
         int minesAmount = battleShip.getMine().getAmount();
 
         BattleShipConfig.setMinesAmount(minesAmount);
-        setBattelShipConfiguration(battleShip);
+        battleShipConfigs = setBattelShipConfiguration(battleShip);
 
         for(BattleShipGame.Boards.Board board : boards.getBoard() ){
             if(player1) {
                 for (BattleShipGame.Boards.Board.Ship ship : board.getShip()) {
                     battleShipsPlayer1.add(ship);
+                    if(amountByIdPlayer1.containsKey(ship.getShipTypeId())){
+                        amountByIdPlayer1.put(ship.getShipTypeId(), amountByIdPlayer1.get(ship.getShipTypeId()) + 1);
+                    }
+                    else{
+                        amountByIdPlayer1.put(ship.getShipTypeId(), 1);
+                    }
                 }
                 player1 = false;
             }
             else{
                 for (BattleShipGame.Boards.Board.Ship ship : board.getShip()) {
                     battleShipsPlayer2.add(ship);
+                    if(amountByIdPlayer2.containsKey(ship.getShipTypeId())){
+                        amountByIdPlayer2.put(ship.getShipTypeId(), amountByIdPlayer2.get(ship.getShipTypeId()) + 1);
+                    }
+                    else{
+                        amountByIdPlayer2.put(ship.getShipTypeId(), 1);
+                    }
                 }
             }
         }
+
+        valid &= checkBattleShipsAmount(amountByIdPlayer1);
+        valid &= checkBattleShipsAmount(amountByIdPlayer2);
+
         valid &= setAndCheckBattleShipsLocation(battleShipsPlayer1);
 
         valid &= setAndCheckBattleShipsLocation(battleShipsPlayer2);
 
         return valid;
+    }
+
+    private boolean checkBattleShipsAmount(Map<String, Integer> amountById) throws Exception{
+        int amount;
+
+        for(Map.Entry<String,Integer> entry : amountById.entrySet()){
+            amount = getShipAmountByShipType(entry.getKey());
+            if(amount != entry.getValue()){
+                throw new Exception("battleShips amount not equal to battleShips players");
+            }
+        }
+
+        return true;
+    }
+
+
+    public static int getShipLengthByShipType(String i_type) throws Exception{
+        int res = 0;
+
+        for(BattleShipConfig battleShip : battleShipConfigs){
+            if(i_type.equals(battleShip.getShipType())){
+                res = battleShip.getShipLength();
+            }
+        }
+
+        if(res == 0){
+            throw new Exception("BattleShip type does not exist or equal to 0");
+        }
+
+        return res;
+    }
+
+    public static int getShipScoreByShipType(String shipTypeId) {
+        int res = 0;
+
+        for(BattleShipConfig battleShip : battleShipConfigs){
+            if(shipTypeId.equals(battleShip.getShipType())){
+                res = battleShip.getShipScore();
+            }
+        }
+
+        return res;
+    }
+
+    public static int getShipAmountByShipType(String i_type) throws Exception{
+        int res = 0;
+
+        for(BattleShipConfig battleShip : battleShipConfigs){
+            if(i_type.equals(battleShip.getShipType())){
+                res = battleShip.getShipAmount();
+            }
+        }
+
+        if(res == 0){
+            throw new Exception("BattleShip type does not exist or equal to 0");
+        }
+
+        return res;
     }
 
     private Boolean setAndCheckBattleShipsLocation(ArrayList<BattleShipGame.Boards.Board.Ship> battleShipsPlayer) throws Exception {
@@ -105,7 +173,7 @@ public class XmlLoader {
             position = currentShip.getPosition();
             int positionX = position.getX();
             int positionY = position.getY();
-            length = BattleShipConfig.getShipLengthByShipType(currentShip.getShipTypeId());
+            length = getShipLengthByShipType(currentShip.getShipTypeId());
 
             if (direction.equals(ROW) && valid) {
                 shipIndex++;
@@ -114,7 +182,6 @@ public class XmlLoader {
             } else if (direction.equals(COLUMN) && valid) {
                 shipIndex++;
                 valid &= checkDirectionColumn(boardMat, positionX, positionY, length, shipIndex);
-                System.out.println(valid + "check");
 
             } else if (direction.equals(RIGHT_DOWN) && valid) {
                 shipIndex++;
@@ -140,13 +207,13 @@ public class XmlLoader {
             throw new Exception("Battelships location is invalid! " + msg);
         }
 
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                System.out.print(" " + boardMat[i][j] + " ");
-            }
-            System.out.print("\n");
-        }
-        System.out.print("---------------------------------\n");
+//        for (int i = 0; i < boardSize; i++) {
+//            for (int j = 0; j < boardSize; j++) {
+//                System.out.print(" " + boardMat[i][j] + " ");
+//            }
+//            System.out.print("\n");
+//        }
+//        System.out.print("---------------------------------\n");
 
 
 
@@ -158,14 +225,12 @@ public class XmlLoader {
         Boolean valid = true;
         int AROUND_MY_SHIP = shipIndex * 10;
 
-
-
             if (positionX - 1 >= 0) {
                 if (boardMat[positionX - 1][positionY] == 0 ||
                         boardMat[positionX - 1][positionY] >= AROUND_SHIP ) {
                     boardMat[positionX - 1][positionY] = AROUND_MY_SHIP; // check around the battelship
                 }else if(  boardMat[positionX - 1][positionY] == shipIndex) {
-                    //L ship case
+                    boardMat[positionX - 1][positionY] = shipIndex;
                 }
                  else {
                     valid = false;
@@ -183,7 +248,7 @@ public class XmlLoader {
                                 boardMat[positionX][positionY - 1] >= AROUND_SHIP) {
                             boardMat[positionX][positionY - 1] = AROUND_MY_SHIP;
                         }else if(boardMat[positionX][positionY - 1] == shipIndex) {
-                            //L type case
+                            boardMat[positionX][positionY - 1] = shipIndex;
                         }else {
                             valid = false;
                             int tmpY = positionY - 1;
@@ -196,7 +261,7 @@ public class XmlLoader {
                                 boardMat[positionX][positionY + 1] >= AROUND_SHIP) {
                             boardMat[positionX][positionY + 1] = AROUND_MY_SHIP;
                         }else if(boardMat[positionX][positionY + 1] == shipIndex){
-                            //L type case
+                            boardMat[positionX][positionY + 1] = shipIndex;
                         }else {
                             valid = false;
                             int tmpY = positionY + 1;
@@ -205,13 +270,14 @@ public class XmlLoader {
                         }
                     }
 
-                    if (positionX + 1 <= boardSize + 1) {
+                    if (positionX < boardSize ) {
                         positionX++;
                     } else {
                         msg = "There is a battle ship out of the board range";
                         throw new Exception(msg);
                     }
-                } else if(boardMat[positionX][positionY] == AROUND_MY_SHIP){
+
+                }else if(boardMat[positionX][positionY] == AROUND_MY_SHIP){
                     boardMat[positionX][positionY] = shipIndex;
                 }else if (boardMat[positionX][positionY] >= AROUND_SHIP) {
                     valid = false;
@@ -223,7 +289,7 @@ public class XmlLoader {
                     throw new Exception(msg);
                 }
             }
-            if (positionX <= boardSize && boardMat[positionX][positionY] != shipIndex ) {
+            if (positionX < boardSize && boardMat[positionX][positionY] != shipIndex ) {
                 boardMat[positionX][positionY] = AROUND_SHIP;
             }
 
@@ -231,7 +297,7 @@ public class XmlLoader {
     }
 
     private Boolean checkDirectionRow(int[][] boardMat, int positionX, int positionY , int length, int shipIndex) throws  Exception{
-        String msg = new String();
+        String msg;
         int AROUND_MY_SHIP = shipIndex * 10;
         Boolean valid = true;
 
@@ -240,7 +306,7 @@ public class XmlLoader {
                         boardMat[positionX][positionY - 1] >= AROUND_SHIP) {
                     boardMat[positionX][positionY - 1] = AROUND_MY_SHIP; // check around the battelship
                 }else if(boardMat[positionX][positionY - 1] == shipIndex) {
-                    //L type case
+                    boardMat[positionX][positionY - 1] = shipIndex;
                 } else{
                     valid = false;
                     int tmpY = positionY - 1;
@@ -258,21 +324,20 @@ public class XmlLoader {
                                 boardMat[positionX - 1][positionY] >= AROUND_SHIP) {
                             boardMat[positionX - 1][positionY] = AROUND_MY_SHIP;
                         }else if(boardMat[positionX - 1][positionY] == shipIndex){
-                            //L type case
+                            boardMat[positionX - 1][positionY] = shipIndex;
                         }else {
                             valid = false;
                             int tmpX = positionX - 1;
                             msg = "There is a battle ship near square [" + tmpX + "," + positionY + "].";
                             throw new Exception(msg);
-
                         }
                     }
-                    if (positionX + 1  < boardSize) {
+                    if (positionX + 1 < boardSize) {
                         if (boardMat[positionX + 1][positionY] == 0 ||
                                 boardMat[positionX + 1][positionY] >= AROUND_SHIP) {
                             boardMat[positionX + 1][positionY] = AROUND_MY_SHIP;
                         }else if(boardMat[positionX + 1][positionY] == shipIndex){
-                            //L type case
+                            boardMat[positionX + 1][positionY] = shipIndex;
                         } else {
                             valid = false;
                             int tmpX = positionX + 1;
@@ -281,66 +346,54 @@ public class XmlLoader {
                         }
                     }
 
-                    if (positionY + 1 <= boardSize + 1) {
+                    if (positionY < boardSize ) {
                         positionY++;
                     } else {
                         valid = false;
-                        msg = "There is a battle ship near square [" + positionX + "," + positionY + "].";
+                        msg = "There is a battle ship out of the board range";
                         throw new Exception(msg);
                     }
-                } else {
+                }else if(boardMat[positionX][positionY] == AROUND_MY_SHIP){
+                    boardMat[positionX][positionY] = shipIndex;
+                }else if (boardMat[positionX][positionY] >= AROUND_SHIP) {
                     valid = false;
                     msg = "There is a battle ship near square [" + positionX + "," + positionY + "].";
                     throw new Exception(msg);
+                } else {
+                    valid = false;
+                    msg = "There is a battle ship on battle ship!";
+                    throw new Exception(msg);
                 }
             }
-            if (positionY <= boardSize + 1 && boardMat[positionX][positionY]!= shipIndex) {
+            if (positionY < boardSize && boardMat[positionX][positionY]!= shipIndex) {
                 boardMat[positionX][positionY] = AROUND_MY_SHIP;
             }
-
 
         return valid;
     }
 
 
-    private void setBattelShipConfiguration(BattleShipGame battleShip) {
+    private ArrayList<BattleShipConfig> setBattelShipConfiguration(BattleShipGame battleShip) {
         BattleShipGame.ShipTypes shipTypes = battleShip.getShipTypes();
+        ArrayList<BattleShipConfig> battleShipsTypes = new ArrayList<>();
 
-        try {
-            for (BattleShipGame.ShipTypes.ShipType shipType : shipTypes.getShipType()) {
-                if (shipType.getId().equals("A")) {
-                    BattleShipConfig.setShipAmountTypeA(shipType.getAmount());
-                    BattleShipConfig.setShipLengthTypeA(shipType.getLength());
-                    BattleShipConfig.setShipScoreTypeA(shipType.getScore());
-                } else if (shipType.getId().equals("B")) {
-                    BattleShipConfig.setShipAmountTypeB(shipType.getAmount());
-                    BattleShipConfig.setShipLengthTypeB(shipType.getLength());
-                    BattleShipConfig.setShipScoreTypeB(shipType.getScore());
-                } else if (shipType.getId().equals("L")) {
-                    BattleShipConfig.setShipAmountTypeL(shipType.getAmount());
-                    BattleShipConfig.setShipLengthTypeL(shipType.getLength());
-                    BattleShipConfig.setShipScoreTypeL(shipType.getScore());
-                } else {
-                    throw new Exception("ship type " + shipType.getId() + " not exist in our game");
-                }
-            }
-        }catch (Exception e){
-            System.err.println("Exception: " + e);
+        for (BattleShipGame.ShipTypes.ShipType shipType : shipTypes.getShipType()) {
+            BattleShipConfig battleShipConfig = new BattleShipConfig();
+            battleShipConfig.setShipAmount(shipType.getAmount());
+            battleShipConfig.setShipLength(shipType.getLength());
+            battleShipConfig.setShipScore(shipType.getScore());
+            battleShipConfig.setShipType(shipType.getId());
+            battleShipsTypes.add(battleShipConfig);
+        }
+
+        return battleShipsTypes;
+    }
+
+    private void checkIfBoardSizeLiggal(int boardSize) throws Exception{
+        if (boardSize > MAX_BOARD_SIZE || boardSize < MIN_BOARD_SIZE) {
+            throw new Exception("Illegal board size , the min size is: " + MIN_BOARD_SIZE + "and max size is " + MAX_BOARD_SIZE);
         }
     }
 
-    private void checkIfBoardSizeLiggal(int boardSize) {
-        try {
-            if (boardSize > MAX_BOARD_SIZE || boardSize < MIN_BOARD_SIZE) {
-                throw new Exception("Illegal board size");
-            }
-        } catch (Exception e) {
-            if(boardSize < MIN_BOARD_SIZE)
-                System.err.println("Exception : you'r board size is " +boardSize +" it should be at least " + MIN_BOARD_SIZE);
-            else
-            {
-                System.err.println("Exception : you'r board size is " +boardSize +" it should maximum " + MAX_BOARD_SIZE);
-            }
-        }
-    }
+
 }

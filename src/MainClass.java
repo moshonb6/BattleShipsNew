@@ -15,19 +15,24 @@ public class MainClass {
                 try {
                     XmlLoader xml = new XmlLoader();
                     gameLoaded = xml.loadBattelShipsConfig();
+                    UserIteration.loadGameCompleteMsg();
                     main(args);
                 }catch (Exception e){
-                    System.out.println("Exception: " + e);
+                    System.out.println("Exception: " + e.getMessage());
+                    main(args);
                 }
                 break;
             case 2:
-                if(gameLoaded) {
-                    gameManager.playGame();
-                    main(args);
-                }
-                else{
-                    UserIteration.loadGameBeforeStartMsg();
-                    main(args);
+                try {
+                    if (gameLoaded) {
+                        gameManager.playGame();
+                        main(args);
+                    } else {
+                        UserIteration.loadGameBeforeStartMsg();
+                        main(args);
+                    }
+                }catch (Exception e){
+
                 }
                 break;
             case 6:

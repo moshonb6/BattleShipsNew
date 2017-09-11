@@ -3,13 +3,13 @@
   <boardSize>6</boardSize>
   <shipTypes>
     <!--1 or more repeti  tions:-->
-    <shipType id="A">
+    <shipType id="C">
       <category>REGULAR</category>
       <amount>1</amount>
-      <length>2</length>
+      <length>3</length>
       <score>3</score>
     </shipType>
-    <shipType id="L">
+    <shipType id="M">
       <category>REGULAR</category>
       <amount>1</amount>
       <length>3</length>
@@ -24,13 +24,13 @@
     <board>
       <!--1 or more repetitions:-->
       <ship>
-        <shipTypeId>L</shipTypeId>
+        <shipTypeId>M</shipTypeId>
         <position x="2" y="2"/>
         <direction>DOWN_RIGHT</direction>
       </ship>
       <ship>
-        <shipTypeId>A</shipTypeId>
-        <position x="5" y="0"/>
+        <shipTypeId>C</shipTypeId>
+        <position x="4" y="2"/>
         <direction>ROW</direction>
       </ship>
       <!--1 or more repetitions:-->
@@ -38,16 +38,15 @@
     <board>
       <!--1 or more repetitions:-->
       <ship>
-        <shipTypeId>A</shipTypeId>
+        <shipTypeId>M</shipTypeId>
         <position x="1" y="1"/>
         <direction>COLUMN</direction>
       </ship>
       <ship>
-        <shipTypeId>A</shipTypeId>
+        <shipTypeId>C</shipTypeId>
         <position x="3" y="3"/>
         <direction>COLUMN</direction>
       </ship>
-      1 or more repetitions:
     </board>
   </boards>
 </BattleShipGame>
